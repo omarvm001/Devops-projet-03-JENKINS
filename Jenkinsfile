@@ -96,7 +96,7 @@ pipeline {
      }
      stage('Push image in production and deploy it') {
        when {
-           expression { env.BRANCH_NAME == 'origin/master' }
+           expression { GIT_BRANCH == 'origin/master' }
        }
 	agent {
         	docker { image 'franela/dind' }
