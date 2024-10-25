@@ -7,9 +7,9 @@ pipeline {
         APP_CONTAINER_PORT = "5000"
         APP_EXPOSED_PORT = "80"
         IMAGE_TAG = "latest"
-        STAGING = "${ID_DOCKER}-staging"
-        PRODUCTION = "${ID_DOCKER}-production"
-        DOCKERHUB_ID = "omarvm001" // Utilise 'omarvm001' par défaut si ID_DOCKER_PARAMS n'est pas défini
+	DOCKERHUB_ID = "omarvm001" // Utilise 'omarvm001' par défaut si ID_DOCKER_PARAMS n'est pas défini
+        STAGING = "${DOCKERHUB_ID}-stagingg"
+        PRODUCTION = "${DOCKERHUB_ID}-productionn"
         DOCKERHUB_PASSWORD = credentials('dockerhub')
     }
     agent none
