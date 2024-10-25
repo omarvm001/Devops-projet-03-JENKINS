@@ -8,8 +8,8 @@ pipeline {
         APP_EXPOSED_PORT = "80"
         IMAGE_TAG = "latest"
 	DOCKERHUB_ID = "omarvm001" // Utilise 'omarvm001' par défaut si ID_DOCKER_PARAMS n'est pas défini
-        STAGING = "${DOCKERHUB_ID}-stagingg"
-        PRODUCTION = "${DOCKERHUB_ID}-productionn"
+        STAGING = "${DOCKERHUB_ID}-staging"
+        PRODUCTION = "${DOCKERHUB_ID}-production"
         DOCKERHUB_PASSWORD = credentials('dockerhub')
     }
     agent none
@@ -86,10 +86,10 @@ pipeline {
 	     	apk --no-cache add npm
                 npm install -g heroku
                 heroku container:login
-                heroku stack:set container -a $STAGING
-                heroku create $STAGING || echo "project already exists"
-                heroku container:push web -a $STAGING
-                heroku container:release web -a $STAGING
+                heroku stack:set container -a projet_jenkins_staging
+                heroku create projet_jenkins_staging || echo "project already exists"
+                heroku container:push web -a projet_jenkins_staging
+                heroku container:release web -a projet_jenkins_staging
              '''
            }
         }
