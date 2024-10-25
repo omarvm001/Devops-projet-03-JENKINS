@@ -83,6 +83,7 @@ pipeline {
         steps {
            script {
              sh '''
+	     	apk --no-cache add npm
                 npm install -g heroku
                 heroku container:login
                 heroku stack:set container -a $STAGING
