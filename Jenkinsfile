@@ -3,7 +3,7 @@
 
 pipeline {
     environment {
-        IMAGE_NAME = "Devops-projet-03-JENKINS"
+        IMAGE_NAME = "devops-projet-03-jenkins"
         APP_CONTAINER_PORT = "5000"
         APP_EXPOSED_PORT = "80"
         IMAGE_TAG = "latest"
