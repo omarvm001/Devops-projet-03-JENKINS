@@ -33,7 +33,8 @@ Ce projet met en place un pipeline CI/CD via Jenkins pour automatiser le process
    - [Login and Push Image on Docker Hub](#5-login-and-push-image-on-docker-hub)
    - [Push Image in Staging and Deploy It](#6-push-image-in-staging-and-deploy-it)
    - [Push Image in Production and Deploy It](#7-push-image-in-production-and-deploy-it)
-4. [Notifications](#notifications)
+4. [Notifications Sur Slack](#notifications-sur-slack)
+5. [Conclusion](#conclusion)
 
 ## Prérequis
 
@@ -92,14 +93,153 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
 
 ### 2. Run Container Based on Built Image
 
+   - **Résumé** : Lance un conteneur à partir de l’image construite. Si un conteneur avec le même nom existe déjà, il est supprimé.
+   - **Objectif** : S'assurer que l’image fonctionne en tant que conteneur avant de passer aux tests.
+
+   ```groovy
+  stage('Run container based on built image') {
+   agent any
+   steps {
+     script {
+       sh '''
+           echo "Cleaning existing container if exist"
+           docker ps -a | grep -i $IMAGE_NAME && docker rm -f $IMAGE_NAME
+           docker run --name $IMAGE_NAME -d -p $APP_EXPOSED_PORT:$APP_CONTAINER_PORT -e PORT=$APP_CONTAINER_PORT ${DOCKERHUB_ID}/$IMAGE_NAME:$IMAGE_TAG
+           sleep 5
+       '''
+     }
+   }
+}
+```
+
 ### 3. Test Image
+
+- **Résumé** : Teste l’application en envoyant une requête HTTP au conteneur pour vérifier la présence de contenu attendu.
+- **Objectif** : Valider que l'application dans le conteneur est servie correctement.
+
+   ```groovy
+stage('Test image') {
+    agent any
+    steps {
+       script {
+         sh 'curl 172.17.0.1 | grep -i "Dimension"'
+       }
+    }
+}
+```
 
 ### 4. Clean Container
 
+- **Résumé** : Arrête et supprime le conteneur de test pour garder l'environnement propre.
+- **Objectif** : Libérer des ressources après les tests.
+
+   ```groovy
+stage('Clean container') {
+   agent any
+   steps {
+      script {
+        sh 'docker stop $IMAGE_NAME && docker rm $IMAGE_NAME'
+      }
+   }
+}
+```
+
 ### 5. Login and Push Image on Docker Hub
+
+- **Résumé** : Pousse l'image Docker sur Docker Hub pour permettre le déploiement dans les environnements staging et production.
+- **Objectif** : Publier l'image pour un accès depuis des environnements distants.
+
+   ```groovy
+stage ('Login and Push Image on Docker Hub') {
+   agent any
+   steps {
+      script {
+        sh '''
+            echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_ID --password-stdin
+            docker push ${DOCKERHUB_ID}/$IMAGE_NAME:$IMAGE_TAG
+        '''
+      }
+   }
+}
+```
 
 ### 6. Push Image in Staging and Deploy It
 
+- **Résumé** : Déploie l'image sur Heroku en mode staging. Si l'application de staging n'existe pas, elle est créée.
+- **Objectif** : Tester l'application en environnement staging avant le déploiement en production.
+
+   ```groovy
+stage('Push image in staging and deploy it') {
+   when {
+       expression { GIT_BRANCH == 'origin/master' }
+   }
+   agent {
+       docker { image 'franela/dind' }
+   }
+   environment {
+       HEROKU_API_KEY = credentials('heroku_api_key')
+   }
+   steps {
+      script {
+        sh '''
+            apk --no-cache add npm
+            npm install -g heroku
+            heroku container:login
+            heroku stack:set container -a $STAGING
+            heroku create $STAGING || echo "project already exists"
+            heroku container:push web -a $STAGING
+            heroku container:release web -a $STAGING
+        '''
+      }
+   }
+}
+
+```
+
 ### 7. Push Image in Production and Deploy It
+
+- **Résumé** : Déploie l'image sur Heroku en mode production. L’application production est créée si elle n'existe pas.
+- **Objectif** : Déployer la version finale de l’application pour les utilisateurs.
+
+   ```groovy
+stage('Push image in production and deploy it') {
+   when {
+       expression { GIT_BRANCH == 'origin/master' }
+   }
+   agent {
+       docker { image 'franela/dind' }
+   }
+   environment {
+       HEROKU_API_KEY = credentials('heroku_api_key')
+   }
+   steps {
+      script {
+        sh '''
+            apk --no-cache add npm
+            npm install -g heroku
+            heroku container:login
+            heroku stack:set container -a $PRODUCTION
+            heroku create $PRODUCTION || echo "project already exists"
+            heroku container:push web -a $PRODUCTION
+            heroku container:release web -a $PRODUCTION
+        '''
+      }
+   }
+}
+```
+
+## Notifications Sur Slack
+À la fin de chaque pipeline :
+
+En cas de succès, un message vert est envoyé sur Slack.
+En cas d’échec, un message rouge est envoyé sur Slack.
+
+## Conclusion
+
+La mise en place de ce pipeline CI/CD pour l'application web statique avec Jenkins a permis d'automatiser les processus de construction, de test et de déploiement, garantissant que chaque mise à jour est rigoureusement testée avant sa mise en production. Grâce à Docker, l'application est non seulement portable, mais bénéficie également d'une gestion cohérente des environnements. L'intégration de Jenkins CI/CD a simplifié le flux de travail et accéléré les déploiements, réduisant ainsi les risques d'erreurs humaines et facilitant la gestion des versions.
+
+Ce pipeline a permis une approche DevOps solide, en assurant un cycle de développement plus agile et des retours d'information rapides grâce aux tests automatisés. Enfin, l'hébergement sur Heroku offre une plateforme flexible pour déployer l'application dans différents environnements (staging, production), garantissant ainsi que l'application est prête avant chaque mise en production.
+
+En résumé, ce projet démontre comment les outils modernes comme Docker, Jenkins, et Heroku peuvent être intégrés efficacement pour améliorer la qualité, la rapidité et la fiabilité des livraisons d'applications.
 
 
