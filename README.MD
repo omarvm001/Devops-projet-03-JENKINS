@@ -90,13 +90,16 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
    }
 ```
 
-## Structure Globale du Jenkinsfile
-Ce projet utilise un pipeline CI/CD pour automatiser le processus de développement et de déploiement de l'application. Voici un aperçu des étapes clés du workflow et leurs conditions d'exécution.
+### 2. Run Container Based on Built Image
 
-### Importation de la bibliothèque partagée
-```groovy
-@Library('shared-library')_
-```
-Cette ligne importe une bibliothèque partagée pour centraliser les fonctions et les scripts réutilisables dans plusieurs pipelines Jenkins.
+### 3. Test Image
+
+### 4. Clean Container
+
+### 5. Login and Push Image on Docker Hub
+
+### 6. Push Image in Staging and Deploy It
+
+### 7. Push Image in Production and Deploy It
 
 
