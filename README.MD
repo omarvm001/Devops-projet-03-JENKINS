@@ -162,7 +162,7 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
             }
          }
       }
-```
+   ```
 
 ### 6. Push Image in Staging and Deploy It
 
