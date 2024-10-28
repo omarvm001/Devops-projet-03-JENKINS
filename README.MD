@@ -233,8 +233,9 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
 
 À la fin de chaque pipeline :
 
-En cas de succès, un message vert est envoyé sur Slack.
-En cas d’échec, un message rouge est envoyé sur Slack.
+   - En cas de succès, un message vert est envoyé sur Slack.
+
+   - En cas d’échec, un message rouge est envoyé sur Slack.
 
 ## Conclusion
 
