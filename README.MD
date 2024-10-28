@@ -194,7 +194,7 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
          }
       }
    }
-
+```
 
 ### 7. Push Image in Production and Deploy It
 
