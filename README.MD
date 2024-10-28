@@ -118,32 +118,32 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
 - **Résumé** : Teste l’application en envoyant une requête HTTP au conteneur pour vérifier la présence de contenu attendu.
 - **Objectif** : Valider que l'application dans le conteneur est servie correctement.
 
-   ```groovy
-   stage('Test image') {
-       agent any
-       steps {
-          script {
-            sh 'curl 172.17.0.1 | grep -i "Dimension"'
+      ```groovy
+      stage('Test image') {
+          agent any
+          steps {
+             script {
+               sh 'curl 172.17.0.1 | grep -i "Dimension"'
+             }
           }
-       }
-   }
-```
+      }
+   ```
 
 ### 4. Clean Container
 
 - **Résumé** : Arrête et supprime le conteneur de test pour garder l'environnement propre.
 - **Objectif** : Libérer des ressources après les tests.
 
-   ```groovy
-   stage('Clean container') {
-      agent any
-      steps {
-         script {
-           sh 'docker stop $IMAGE_NAME && docker rm $IMAGE_NAME'
+      ```groovy
+      stage('Clean container') {
+         agent any
+         steps {
+            script {
+              sh 'docker stop $IMAGE_NAME && docker rm $IMAGE_NAME'
+            }
          }
       }
-   }
-```
+   ```
 
 ### 5. Login and Push Image on Docker Hub
 
