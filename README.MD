@@ -88,7 +88,7 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
           }
        }
    }
-
+```
 
 ## Structure Globale du Jenkinsfile
 Ce projet utilise un pipeline CI/CD pour automatiser le processus de développement et de déploiement de l'application. Voici un aperçu des étapes clés du workflow et leurs conditions d'exécution.
