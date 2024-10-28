@@ -42,9 +42,15 @@ Ce projet fait appel à plusieurs technologies pour assurer une intégration con
 - **Staging** : Déploiement de l'application pour des tests pré-production.
 - **Production** : L'environnement final accessible aux utilisateurs.
 
-## Workflow du Pipeline CI/CD
 
+
+## Structure Globale du Jenkinsfile
 Ce projet utilise un pipeline CI/CD pour automatiser le processus de développement et de déploiement de l'application. Voici un aperçu des étapes clés du workflow et leurs conditions d'exécution.
 
+### Importation de la bibliothèque partagée
+```groovy
+@Library('shared-library')_
+```
+Cette ligne importe une bibliothèque partagée pour centraliser les fonctions et les scripts réutilisables dans plusieurs pipelines Jenkins.
 
-More info [here](https://html5up.net/license).
+
