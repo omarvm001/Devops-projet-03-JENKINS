@@ -35,7 +35,8 @@ Ce projet met en place un pipeline CI/CD via Jenkins pour automatiser le process
    - [Push Image in Staging and Deploy It](#6-push-image-in-staging-and-deploy-it)
    - [Push Image in Production and Deploy It](#7-push-image-in-production-and-deploy-it)
 4. [Notifications Sur Slack](#notifications-sur-slack)
-5. [Conclusion](#conclusion)
+5. [Apreçu des Résultats](#apreçu-des-résultats)
+6. [Conclusion](#conclusion)
 
 ## Prérequis
 
@@ -246,6 +247,23 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
    - En cas de succès, un message vert est envoyé sur Slack.
 
    - En cas d’échec, un message rouge est envoyé sur Slack.
+
+## Apreçu des Résultats
+Dans cette section, vous trouverez des captures d'écran illustrant le déploiement réussi de notre application.
+
+- **Docker Hub** : Image déployée et disponible dans le registre Docker Hub sous le nom du projet, permettant une réutilisation facile pour des déploiements futurs.
+
+![project](https://github.com/omarvm001/Devops-projet-03-JENKINS/blob/master/images/img_dockerhub.png)
+
+- **Heroku Staging et Production** : Déploiements distincts sur Heroku pour les environnements de staging et de production, montrant la flexibilité d'une infrastructure multi-environnements. Ces captures montrent l'application en cours d'exécution dans des environnements isolés, chacun prêt pour des tests ou une mise en ligne.
+
+![project](https://github.com/omarvm001/Devops-projet-03-JENKINS/blob/master/images/img_heroku.png)
+
+- **Notifications Slack** : Intégration de notifications Slack en temps réel, indiquant le statut de chaque étape du pipeline. Un message de succès en vert confirme le déploiement sans erreurs, tandis qu'un message en rouge alerte immédiatement en cas de problème, permettant une intervention rapide.
+
+![project](https://github.com/omarvm001/Devops-projet-03-JENKINS/blob/master/images/img_slack.png)
+
+Ces résultats confirment que l'ensemble du pipeline CI/CD est opérationnel, assurant un déploiement automatisé, fiable et facilement maintenable de l'application.
 
 ## Conclusion
 
