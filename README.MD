@@ -17,6 +17,31 @@ Le `Dockerfile` décrit la construction de l'image en clonant le code source, pu
 
 Le pipeline utilise des services comme `docker:dind` pour la gestion des conteneurs Docker et des configurations d'environnement pour automatiser le déploiement et les tests dans différents environnements. Chaque étape est orchestrée pour assurer une livraison continue, en passant par des phases de tests automatisés avant chaque mise en production.
 
+
+# CI/CD Pipeline avec Jenkins pour une Application Web Statique
+
+Ce projet met en place un pipeline CI/CD via Jenkins pour automatiser le processus de **build**, **test** et **déploiement** d'une application web statique sur Docker et Heroku. L'application est conteneurisée avec Docker et est servie par Nginx. Le pipeline gère automatiquement les déploiements dans les environnements staging et production sur Heroku.
+
+## Table des Matières
+1. [Prérequis](#prérequis)
+2. [Technologies Utilisées](#technologies-utilisées)
+3. [Pipeline CI/CD - Jenkinsfile](#pipeline-cicd---jenkinsfile)
+   - [Build Image](#1-build-image)
+   - [Run Container Based on Built Image](#2-run-container-based-on-built-image)
+   - [Test Image](#3-test-image)
+   - [Clean Container](#4-clean-container)
+   - [Login and Push Image on Docker Hub](#5-login-and-push-image-on-docker-hub)
+   - [Push Image in Staging and Deploy It](#6-push-image-in-staging-and-deploy-it)
+   - [Push Image in Production and Deploy It](#7-push-image-in-production-and-deploy-it)
+4. [Notifications](#notifications)
+
+## Prérequis
+
+- [Docker](https://www.docker.com/) pour la conteneurisation.
+- [Jenkins](https://www.jenkins.io/) pour orchestrer le pipeline CI/CD.
+- [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) pour le déploiement sur Heroku.
+- Compte Docker Hub pour stocker les images Docker.
+
 ## Technologies Utilisées
 
 Ce projet fait appel à plusieurs technologies pour assurer une intégration continue fluide, un déploiement automatisé et un hébergement fiable de l'application web statique.
@@ -42,6 +67,27 @@ Ce projet fait appel à plusieurs technologies pour assurer une intégration con
 - **Staging** : Déploiement de l'application pour des tests pré-production.
 - **Production** : L'environnement final accessible aux utilisateurs.
 
+
+---
+
+## Pipeline CI/CD - Jenkinsfile
+
+Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu détaillé :
+
+### 1. Build Image
+
+   - **Résumé** : Cette étape construit une image Docker en utilisant le Dockerfile. L’image est taguée avec un identifiant unique.
+   - **Objectif** : Préparer une image conteneurisée de l'application pour la phase de test et de déploiement.
+
+   ```groovy
+   stage('Build image') {
+       agent any
+       steps {
+          script {
+            sh 'docker build -t ${DOCKERHUB_ID}/$IMAGE_NAME:$IMAGE_TAG .'
+          }
+       }
+   }
 
 
 ## Structure Globale du Jenkinsfile
