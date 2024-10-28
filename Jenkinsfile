@@ -83,13 +83,18 @@ pipeline {
         steps {
            script {
              sh '''
-	     	apk --no-cache add npm
-                npm install -g heroku
-                heroku container:login
-                heroku stack:set container -a $STAGING
-                heroku create $STAGING || echo "project already exists"
-                heroku container:push web -a $STAGING
-                heroku container:release web -a $STAGING
+	     	    apk --no-cache add npm
+		    npm install -g heroku
+		    heroku container:login
+		
+		    # Check if the app exists, if not, create it
+		    if ! heroku apps | grep -q "$STAGING"; then
+		        heroku create $STAGING
+		    fi
+		
+		    heroku stack:set container -a $STAGING
+		    heroku container:push web -a $STAGING
+		    heroku container:release web -a $STAGING
              '''
            }
         }
