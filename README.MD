@@ -134,7 +134,7 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
 - **Résumé** : Arrête et supprime le conteneur de test pour garder l'environnement propre.
 - **Objectif** : Libérer des ressources après les tests.
 
-      ```groovy
+   ```groovy
       stage('Clean container') {
          agent any
          steps {
