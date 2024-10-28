@@ -151,17 +151,17 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
 - **Objectif** : Publier l'image pour un accès depuis des environnements distants.
 
    ```groovy
-   stage ('Login and Push Image on Docker Hub') {
-      agent any
-      steps {
-         script {
-           sh '''
-               echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_ID --password-stdin
-               docker push ${DOCKERHUB_ID}/$IMAGE_NAME:$IMAGE_TAG
-           '''
+      stage ('Login and Push Image on Docker Hub') {
+         agent any
+         steps {
+            script {
+              sh '''
+                  echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_ID --password-stdin
+                  docker push ${DOCKERHUB_ID}/$IMAGE_NAME:$IMAGE_TAG
+              '''
+            }
          }
       }
-   }
 ```
 
 ### 6. Push Image in Staging and Deploy It
