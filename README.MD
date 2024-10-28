@@ -169,32 +169,32 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
 - **Résumé** : Déploie l'image sur Heroku en mode staging. Si l'application de staging n'existe pas, elle est créée.
 - **Objectif** : Tester l'application en environnement staging avant le déploiement en production.
 
-   ```groovy
-      stage('Push image in staging and deploy it') {
-         when {
-             expression { GIT_BRANCH == 'origin/master' }
-         }
-         agent {
-             docker { image 'franela/dind' }
-         }
-         environment {
-             HEROKU_API_KEY = credentials('heroku_api_key')
-         }
-         steps {
-            script {
-              sh '''
-                  apk --no-cache add npm
-                  npm install -g heroku
-                  heroku container:login
-                  heroku stack:set container -a $STAGING
-                  heroku create $STAGING || echo "project already exists"
-                  heroku container:push web -a $STAGING
-                  heroku container:release web -a $STAGING
-              '''
+      ```groovy
+         stage('Push image in staging and deploy it') {
+            when {
+                expression { GIT_BRANCH == 'origin/master' }
+            }
+            agent {
+                docker { image 'franela/dind' }
+            }
+            environment {
+                HEROKU_API_KEY = credentials('heroku_api_key')
+            }
+            steps {
+               script {
+                 sh '''
+                     apk --no-cache add npm
+                     npm install -g heroku
+                     heroku container:login
+                     heroku stack:set container -a $STAGING
+                     heroku create $STAGING || echo "project already exists"
+                     heroku container:push web -a $STAGING
+                     heroku container:release web -a $STAGING
+                 '''
+               }
             }
          }
-      }
-   ```
+      ```
 
 ### 7. Push Image in Production and Deploy It
 
