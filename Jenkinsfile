@@ -4,12 +4,13 @@
 pipeline {
     environment {
         IMAGE_NAME = "devops-projet-03-jenkins"
+	HEROKU_NAME = "devops-jenkins"
         APP_CONTAINER_PORT = "5000"
         APP_EXPOSED_PORT = "80"
         IMAGE_TAG = "latest"
       	DOCKERHUB_ID = "omarvm001" // Utilise 'omarvm001' par défaut si ID_DOCKER_PARAMS n'est pas défini
-        STAGING = "${IMAGE_NAME}-staging"
-        PRODUCTION = "${IMAGE_NAME}-production"
+        STAGING = "${HEROKU_NAME}-staging"
+        PRODUCTION = "${HEROKU_NAME}-production"
         DOCKERHUB_PASSWORD = credentials('dockerhub')
     }
     agent none
