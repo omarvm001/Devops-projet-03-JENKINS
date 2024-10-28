@@ -119,14 +119,14 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
 - **Objectif** : Valider que l'application dans le conteneur est servie correctement.
 
    ```groovy
-stage('Test image') {
-    agent any
-    steps {
-       script {
-         sh 'curl 172.17.0.1 | grep -i "Dimension"'
+   stage('Test image') {
+       agent any
+       steps {
+          script {
+            sh 'curl 172.17.0.1 | grep -i "Dimension"'
+          }
        }
-    }
-}
+   }
 ```
 
 ### 4. Clean Container
@@ -135,14 +135,14 @@ stage('Test image') {
 - **Objectif** : Libérer des ressources après les tests.
 
    ```groovy
-stage('Clean container') {
-   agent any
-   steps {
-      script {
-        sh 'docker stop $IMAGE_NAME && docker rm $IMAGE_NAME'
+   stage('Clean container') {
+      agent any
+      steps {
+         script {
+           sh 'docker stop $IMAGE_NAME && docker rm $IMAGE_NAME'
+         }
       }
    }
-}
 ```
 
 ### 5. Login and Push Image on Docker Hub
@@ -151,17 +151,17 @@ stage('Clean container') {
 - **Objectif** : Publier l'image pour un accès depuis des environnements distants.
 
    ```groovy
-stage ('Login and Push Image on Docker Hub') {
-   agent any
-   steps {
-      script {
-        sh '''
-            echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_ID --password-stdin
-            docker push ${DOCKERHUB_ID}/$IMAGE_NAME:$IMAGE_TAG
-        '''
+   stage ('Login and Push Image on Docker Hub') {
+      agent any
+      steps {
+         script {
+           sh '''
+               echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_ID --password-stdin
+               docker push ${DOCKERHUB_ID}/$IMAGE_NAME:$IMAGE_TAG
+           '''
+         }
       }
    }
-}
 ```
 
 ### 6. Push Image in Staging and Deploy It
@@ -170,30 +170,30 @@ stage ('Login and Push Image on Docker Hub') {
 - **Objectif** : Tester l'application en environnement staging avant le déploiement en production.
 
    ```groovy
-stage('Push image in staging and deploy it') {
-   when {
-       expression { GIT_BRANCH == 'origin/master' }
-   }
-   agent {
-       docker { image 'franela/dind' }
-   }
-   environment {
-       HEROKU_API_KEY = credentials('heroku_api_key')
-   }
-   steps {
-      script {
-        sh '''
-            apk --no-cache add npm
-            npm install -g heroku
-            heroku container:login
-            heroku stack:set container -a $STAGING
-            heroku create $STAGING || echo "project already exists"
-            heroku container:push web -a $STAGING
-            heroku container:release web -a $STAGING
-        '''
+   stage('Push image in staging and deploy it') {
+      when {
+          expression { GIT_BRANCH == 'origin/master' }
+      }
+      agent {
+          docker { image 'franela/dind' }
+      }
+      environment {
+          HEROKU_API_KEY = credentials('heroku_api_key')
+      }
+      steps {
+         script {
+           sh '''
+               apk --no-cache add npm
+               npm install -g heroku
+               heroku container:login
+               heroku stack:set container -a $STAGING
+               heroku create $STAGING || echo "project already exists"
+               heroku container:push web -a $STAGING
+               heroku container:release web -a $STAGING
+           '''
+         }
       }
    }
-}
 
 ```
 
@@ -229,7 +229,9 @@ stage('Push image in staging and deploy it') {
    }
 ```
 
+
 ## Notifications Sur Slack
+
 À la fin de chaque pipeline :
 
 En cas de succès, un message vert est envoyé sur Slack.
