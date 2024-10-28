@@ -227,7 +227,7 @@ stage('Push image in production and deploy it') {
       }
    }
 }
-```
+   ```
 
 ## Notifications Sur Slack
 À la fin de chaque pipeline :
