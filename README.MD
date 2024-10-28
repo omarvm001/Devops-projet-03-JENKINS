@@ -127,7 +127,7 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
              }
           }
       }
-   ```
+      ```
 
 ### 4. Clean Container
 
