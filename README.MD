@@ -118,7 +118,7 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
 - **Résumé** : Teste l’application en envoyant une requête HTTP au conteneur pour vérifier la présence de contenu attendu.
 - **Objectif** : Valider que l'application dans le conteneur est servie correctement.
 
-      ```groovy
+   ```groovy
       stage('Test image') {
           agent any
           steps {
@@ -127,7 +127,7 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
              }
           }
       }
-      ```
+   ```
 
 ### 4. Clean Container
 
