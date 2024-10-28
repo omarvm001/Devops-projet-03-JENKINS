@@ -1,8 +1,8 @@
 # Description du Projet 03 JENKINS
-   Lien vers le **Projet 01 DOCKER** de la formation Bootcamp DevOps : 
+   Lien vers le **Projet 01 DOCKER** de la **formation Bootcamp DevOps** : 
    [here](https://github.com/omarvm001/Devops_projet_01_Docker "here")
 
-   Lien vers le **Projet 02 GITLAB-CI** de la formation Bootcamp DevOps : 
+   Lien vers le **Projet 02 GITLAB-CI** de la **formation Bootcamp DevOps** : 
    [here](https://github.com/omarvm001/Devops-projet-02-GITLAB "here")
    
    Ce rapport détaille les étapes du pipeline décrites dans le fichier **Jenkinsfile**, **Dockerfile** ainsi que les bénéfices associés à l'automatisation complète du processus de développement, test et déploiement d'une application via un pipeline CI/CD (Intégration Continue / Livraison Continue) sur **Jenkins**, en utilisant des conteneurs **Docker** et des environnements cloud comme **Heroku**.
