@@ -203,31 +203,31 @@ stage('Push image in staging and deploy it') {
 - **Objectif** : Déployer la version finale de l’application pour les utilisateurs.
 
    ```groovy
-stage('Push image in production and deploy it') {
-   when {
-       expression { GIT_BRANCH == 'origin/master' }
-   }
-   agent {
-       docker { image 'franela/dind' }
-   }
-   environment {
-       HEROKU_API_KEY = credentials('heroku_api_key')
-   }
-   steps {
-      script {
-        sh '''
-            apk --no-cache add npm
-            npm install -g heroku
-            heroku container:login
-            heroku stack:set container -a $PRODUCTION
-            heroku create $PRODUCTION || echo "project already exists"
-            heroku container:push web -a $PRODUCTION
-            heroku container:release web -a $PRODUCTION
-        '''
+   stage('Push image in production and deploy it') {
+      when {
+          expression { GIT_BRANCH == 'origin/master' }
+      }
+      agent {
+          docker { image 'franela/dind' }
+      }
+      environment {
+          HEROKU_API_KEY = credentials('heroku_api_key')
+      }
+      steps {
+         script {
+           sh '''
+               apk --no-cache add npm
+               npm install -g heroku
+               heroku container:login
+               heroku stack:set container -a $PRODUCTION
+               heroku create $PRODUCTION || echo "project already exists"
+               heroku container:push web -a $PRODUCTION
+               heroku container:release web -a $PRODUCTION
+           '''
+         }
       }
    }
-}
-   ```
+```
 
 ## Notifications Sur Slack
 À la fin de chaque pipeline :
