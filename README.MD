@@ -251,6 +251,10 @@ Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu déta
 ## Apreçu des Résultats
 Dans cette section, vous trouverez des captures d'écran illustrant le déploiement réussi de notre application.
 
+- **Pipeline CI/CD JENKINS** : l'image ci-dessous illustre l'execution du pipeline CI/CD via Jenkins :
+
+![project](https://github.com/omarvm001/Devops-projet-03-JENKINS/blob/master/images/jenkins_all_pipeline.png)
+
 - **Docker Hub** : Image déployée et disponible dans le registre Docker Hub sous le nom du projet, permettant une réutilisation facile pour des déploiements futurs.
 
 ![project](https://github.com/omarvm001/Devops-projet-03-JENKINS/blob/master/images/img_dockerhub.png)
