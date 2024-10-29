@@ -77,6 +77,38 @@ Ce projet fait appel à plusieurs technologies pour assurer une intégration con
 
 Le fichier Jenkinsfile décrit chaque étape du pipeline. Voici un aperçu détaillé :
 
+## Variables d’Environnement
+
+Ci-dessous se trouve la liste des variables d’environnement utilisées dans le Jenkinsfile et leur rôle dans le pipeline, en précisant où et comment elles sont définies ou récupérées.
+
+| Variable              | Valeur par Défaut               | Description                                                                                                                                                              | Source / Définition                                                                                               |
+|-----------------------|---------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| `IMAGE_NAME`          | `devops-projet-03-jenkins`      | Nom de l'image Docker à créer. Utilisé dans les étapes de création, d'exécution et de déploiement de l'image.                                                            | Définie directement dans le Jenkinsfile sous `environment`.                                                      |
+| `HEROKU_NAME`         | `devops-jenkins`                | Nom de base pour l'application Heroku, utilisé pour dériver les noms d'applications de staging et de production.                                                         | Définie directement dans le Jenkinsfile.                                                                         |
+| `APP_CONTAINER_PORT`  | `5000`                          | Port d'écoute de l'application à l'intérieur du conteneur Docker. Il est défini comme variable `PORT` lors de l'exécution du conteneur.                                 | Définie directement dans le Jenkinsfile.                                                                         |
+| `APP_EXPOSED_PORT`    | `80`                            | Port exposé sur l'hôte pour accéder au conteneur Docker. Il est mappé au `APP_CONTAINER_PORT` lors de l'exécution du conteneur.                                         | Définie directement dans le Jenkinsfile.                                                                         |
+| `IMAGE_TAG`           | `latest`                        | Tag pour l'image Docker. Utilisé pour identifier la version de l'image, ici défini par défaut sur `latest`.                                                              | Définie directement dans le Jenkinsfile.                                                                         |
+| `DOCKERHUB_ID`        | `omarvm001`                     | Identifiant Docker Hub utilisé pour publier l'image Docker.                                                                                                              | Définie dans le Jenkinsfile.                                                                                     |
+| `STAGING`             | `${HEROKU_NAME}-staging`        | Nom de l'application Heroku pour l'environnement de staging.                                                                                                             | Générée automatiquement à partir de la variable `HEROKU_NAME` dans le Jenkinsfile.                               |
+| `PRODUCTION`          | `${HEROKU_NAME}-production`     | Nom de l'application Heroku pour l'environnement de production.                                                                                                          | Générée automatiquement dans le Jenkinsfile à partir de `HEROKU_NAME`.                                           |
+| `DOCKERHUB_PASSWORD`  | **credentials(`dockerhub`)**    | Mot de passe Docker Hub récupéré de manière sécurisée à partir des credentials Jenkins. Il est nécessaire pour se connecter et publier sur Docker Hub.                    | Récupérée via Jenkins (voir Configuration des Credentials ci-dessous).                                           |
+| `HEROKU_API_KEY`      | **credentials(`heroku_api_key`)** | Clé API pour l’authentification Heroku. Récupérée de manière sécurisée via Jenkins, elle est utilisée pour les déploiements vers Heroku (staging et production).         | Récupérée via Jenkins (voir Configuration des Credentials ci-dessous).                                           |
+| `GIT_BRANCH`          | `N/A`                           | Référence de branche Git utilisée pour déclencher les déploiements en staging et production. Le déploiement ne s'effectue que si cette valeur est `origin/master`.        | Injectée automatiquement par Jenkins lorsque le pipeline est déclenché par un commit sur la branche `master`.    |
+
+### Détails des Sources des Variables Sensibles
+
+Certaines informations sensibles, comme le mot de passe Docker Hub et la clé API Heroku, sont sécurisées en utilisant le gestionnaire de credentials intégré de Jenkins. Ces variables doivent être configurées au préalable dans Jenkins :
+
+1. **Docker Hub Password** (`dockerhub`) :
+   - Dans Jenkins, allez dans **Gestion des Credentials** et ajoutez une nouvelle paire d'identifiants sécurisés en utilisant l’ID `dockerhub`. 
+   - Jenkins utilisera cet ID pour injecter le mot de passe dans la variable d’environnement `DOCKERHUB_PASSWORD` au moment de l'exécution.
+
+2. **Heroku API Key** (`heroku_api_key`) :
+   - Dans Jenkins, ajoutez la clé API d'Heroku sous **Gestion des Credentials** avec l’ID `heroku_api_key`.
+   - Cette clé est injectée dans l'environnement au moment des étapes de déploiement Heroku pour permettre l’authentification.
+               |
+
+
 ### 1. Build Image
 
    - **Résumé** : Cette étape construit une image Docker en utilisant le Dockerfile. L’image est taguée avec un identifiant unique.
